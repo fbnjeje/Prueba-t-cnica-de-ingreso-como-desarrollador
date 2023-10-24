@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/gorilla/mux"
 )
@@ -30,6 +31,13 @@ var videos = allVideos{
 	},
 }
 
+func indexRoute(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "Welcome to my API")
+}
+
 func main() {
-	fmt.Print("hola como estan")
+
+	router := mux.NewRouter().StrictSlash(true)
+
+	router.HandleFunc("/", indexRoute)
 }
