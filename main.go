@@ -52,6 +52,7 @@ func createVideo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(newVideo)
 }
+
 func getVideo(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	videoId, err := strconv.Atoi(vars["id"])
@@ -67,7 +68,24 @@ func getVideo(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(video)
 		}
 	}
+}
 
+func deleteVideo(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	videoId, err := strconv.Atoi(vars["id"])
+
+	if err != nil {
+		fmt.Fprint(w, "Invalid Id")
+		return
+	}
+
+	for i, v := range videos {
+		if v.ID == videoId {
+			videos = append(videos[:i], videos[i+1:]...)
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(videos)
+		}
+	}
 }
 
 func getVideos(w http.ResponseWriter, r *http.Request) {
@@ -94,6 +112,9 @@ func main() {
 
 	// POST
 	router.HandleFunc("/videos", createVideo).Methods("POST")
+
+	//DELETE
+	router.HandleFunc("/videos/{id}", deleteVideo).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":3000", router))
 }
