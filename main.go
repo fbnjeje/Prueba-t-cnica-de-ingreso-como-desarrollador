@@ -131,6 +131,28 @@ func indexRoute(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 
+
+
+	db, err := sql.Open("mysql", "pmt:contraseña@tcp(127.0.0.1:3306)/proyecto")
+    if err != nil {
+        panic(err.Error())
+    }
+    defer db.Close()
+
+
+	Tema := "musica"
+	id := 30
+	
+	insertQuery := "INSERT INTO datosvideo (musica, id) VALUES (?, ?)"
+	_, err = db.Exec(insertQuery, Tema, id)
+	if err != nil {
+		panic(err.Error())
+	}
+
+
+
+
+
 	// router := mux.NewRouter().StrictSlash(true
 	router := mux.NewRouter().StrictSlash(true)
 
