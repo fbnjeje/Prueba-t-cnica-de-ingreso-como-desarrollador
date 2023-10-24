@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/gorilla/mux"
 )
 
 type video struct {
