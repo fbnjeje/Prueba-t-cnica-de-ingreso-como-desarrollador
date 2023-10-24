@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:aplication_flutter/models/gif.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -16,11 +18,15 @@ class MyApp extends StatefulWidget {
 class _MyApp extends State<MyApp> {
   Future<List<gif>> _listadoGifs;
 
-  Future<List<gif>> _getGifs() async {
-    final response = await http.get("http://localhost:3000/");
+  Future<List<gif>> _getGif() async {
+    final response = await http.get(Uri.parse("http://localhost:3000/"));
+
+    List<gif> gifs = [];
 
     if (response.statusCode == 200) {
-      print(response.body);
+      String body = utf8.decode(response.bodyBytes);
+
+      final jsonData = jsonDecode(body);
     } else {
       throw Exception("fallo de la conexion");
     }
@@ -29,6 +35,7 @@ class _MyApp extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    _listadoGifs = _getGifs();
   }
 
   @override
