@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -25,7 +26,7 @@ type allVideos []video
 var videos = allVideos{
 	{
 		ID:          1,
-		Tema:        "Matematcias",
+		Tema:        "Matematicas",
 		Creador:     "JulioProfe",
 		Descripcion: "Aprenderas a hacer una calculadora",
 		Titulo:      "Aprende a como solucionar una calculadora",
@@ -51,6 +52,23 @@ func createVideo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(newVideo)
 }
+func getVideo(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	videoId, err := strconv.Atoi(vars["id"])
+
+	if err != nil {
+		fmt.Fprint(w, "Invalid Id")
+		return
+	}
+
+	for _, video := range videos {
+		if video.ID == videoId {
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(video)
+		}
+	}
+
+}
 
 func getVideos(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -69,8 +87,13 @@ func main() {
 	//Rutas
 
 	router.HandleFunc("/", indexRoute)
-	router.HandleFunc("/videos", getVideos)
-	router.HandleFunc("/videos", createVideo)
+
+	// GET
+	router.HandleFunc("/videos", getVideos).Methods("GET")
+	router.HandleFunc("/videos/{id}", getVideo).Methods("GET")
+
+	// POST
+	router.HandleFunc("/videos", createVideo).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":3000", router))
 }
