@@ -11,26 +11,26 @@ import (
 )
 
 type video struct {
-	ID            int    `json:ID`
-	Tema          string `json:Tema`
-	fechaCreacion string `json:fechaCreacion`
-	Creador       string `json:Creador`
-	Descripcion   string `json:Descripcion`
-	Titulo        string `json:Titulo`
-	Estado        bool   `json:Estado`
+	ID          int    `json:ID`
+	Tema        string `json:Tema`
+	Creador     string `json:Creador`
+	Descripcion string `json:Descripcion`
+	Titulo      string `json:Titulo`
+	Estado      bool   `json:Estado`
+	CreatedOn   string `json:CreatedOn`
 }
 
 type allVideos []video
 
 var videos = allVideos{
 	{
-		ID:            1,
-		Tema:          "Matematcias",
-		fechaCreacion: "23/10/2023",
-		Creador:       "JulioProfe",
-		Descripcion:   "Aprenderas a hacer una calculadora",
-		Titulo:        "Aprende a como solucionar una calculadora",
-		Estado:        true,
+		ID:          1,
+		Tema:        "Matematcias",
+		Creador:     "JulioProfe",
+		Descripcion: "Aprenderas a hacer una calculadora",
+		Titulo:      "Aprende a como solucionar una calculadora",
+		Estado:      true,
+		CreatedOn:   "24/10/2023",
 	},
 }
 
@@ -48,7 +48,7 @@ func createVideo(w http.ResponseWriter, r *http.Request) {
 	newVideo.ID = len(videos) + 1
 
 	videos = append(videos, newVideo)
-
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(newVideo)
 }
 
