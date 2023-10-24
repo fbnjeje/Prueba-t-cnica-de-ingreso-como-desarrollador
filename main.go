@@ -12,7 +12,7 @@ import (
 type video struct {
 	ID            int    `json:ID`
 	Tema          string `json:Tema`
-	fechaCreacion string `json:Creacion`
+	fechaCreacion string `json:fechaCreacion`
 	Creador       string `json:Creador`
 	Descripcion   string `json:Descripcion`
 	Titulo        string `json:Titulo`
@@ -31,6 +31,10 @@ var videos = allVideos{
 		Titulo:        "Aprende a como solucionar una calculadora",
 		Estado:        true,
 	},
+}
+
+func createVideo(w http.ResponseWriter, r *http.Request) {
+
 }
 
 func getVideos(w http.ResponseWriter, r *http.Request) {
