@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -34,7 +35,17 @@ var videos = allVideos{
 }
 
 func createVideo(w http.ResponseWriter, r *http.Request) {
+	var newVideo video
 
+	reqBody, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		fmt.Fprintf(w, "inserte un video valido")
+	}
+
+	json.Unmarshal(reqBody, &newVideo)
+
+	append(videos, newVideo)
 }
 
 func getVideos(w http.ResponseWriter, r *http.Request) {
