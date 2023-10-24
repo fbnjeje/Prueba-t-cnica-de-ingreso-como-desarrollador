@@ -16,16 +16,16 @@ type video struct {
 
 type allVideos []video
 
-var videos = allVideos {
+var videos = allVideos{
 	{
-		ID:1,
-		Tema: "Matematcias",
+		ID:            1,
+		Tema:          "Matematcias",
 		fechaCreacion: "23/10/2023",
-		Creador : "JulioProfe",
-		Descripcion: "Aprenderas a hacer una calculadora",
-		Titulo: "Aprende a como solucionar una calculadora",
-		Estado: true
-	}
+		Creador:       "JulioProfe",
+		Descripcion:   "Aprenderas a hacer una calculadora",
+		Titulo:        "Aprende a como solucionar una calculadora",
+		Estado:        true,
+	},
 }
 
 func main() {
