@@ -47,7 +47,9 @@ func createVideo(w http.ResponseWriter, r *http.Request) {
 
 	newVideo.ID = len(videos) + 1
 
-	append(videos, newVideo)
+	videos = append(videos, newVideo)
+
+	json.NewEncoder(w).Encode(newVideo)
 }
 
 func getVideos(w http.ResponseWriter, r *http.Request) {
