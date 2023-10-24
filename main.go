@@ -45,6 +45,8 @@ func createVideo(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(reqBody, &newVideo)
 
+	newVideo.ID = len(videos) + 1
+
 	append(videos, newVideo)
 }
 
