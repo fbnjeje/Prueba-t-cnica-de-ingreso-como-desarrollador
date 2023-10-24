@@ -84,6 +84,7 @@ func deleteVideo(w http.ResponseWriter, r *http.Request) {
 			videos = append(videos[:i], videos[i+1:]...)
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(videos)
+			fmt.Print("Deleted sussesfully")
 		}
 	}
 }
@@ -91,6 +92,17 @@ func deleteVideo(w http.ResponseWriter, r *http.Request) {
 func getVideos(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(videos)
+}
+
+func updateVideo(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	videoId, err := strconv.Atoi(vars["id"])
+
+	if err != nil {
+		fmt.Fprint(w, "Invalid Id")
+		return
+	}
+
 }
 
 func indexRoute(w http.ResponseWriter, r *http.Request) {
