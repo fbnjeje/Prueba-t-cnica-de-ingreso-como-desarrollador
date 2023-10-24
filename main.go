@@ -53,35 +53,6 @@ func createVideo(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(newVideo)
 }
 
-func updateVideo(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	videoId, err := strconv.Atoi(vars["id"])
-
-	var updatedVid video
-
-	if err != nil {
-		fmt.Fprint(w, "Invalid Id")
-		return
-	}
-
-	reqBody, err := ioutil.ReadAll(r.Body)
-
-	if err != nil {
-		fmt.Fprint(w, "Ingresa ingresa informacion correspondiente")
-	}
-
-	json.Unmarshal(reqBody, &updatedVid)
-
-	for i, v := range videos {
-		if v.ID == videoId {
-			videos = append(videos[:i], videos[i+1:]...)
-			updatedVid.ID = videoId
-			videos := append(videos, updatedVid)
-
-			fmt.Fprintf(w, "la tarea %v fue modificada correctamente", videos)
-		}
-	}
-}
 func getVideo(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	videoId, err := strconv.Atoi(vars["id"])
@@ -123,6 +94,37 @@ func getVideos(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(videos)
 }
 
+func updateVideo(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	videoId, err := strconv.Atoi(vars["id"])
+
+	var updatedVideo video
+
+	if err != nil {
+		fmt.Fprint(w, "Invalid Id")
+		return
+	}
+
+	reqBody, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		fmt.Fprintf(w, "Ingresa ingresa informacion correspondiente")
+	}
+
+	json.Unmarshal(reqBody, &updatedVideo)
+
+	for i, v := range videos {
+		if v.ID == videoId {
+			videos = append(videos[:i], videos[i+1:]...)
+			updatedVideo.ID = videoId
+			videos := append(videos, updatedVideo)
+
+			fmt.Fprintf(w, "la tarea %v fue modificada correctamente", videoId)
+			fmt.Fprint(w, videos)
+		}
+	}
+}
+
 func indexRoute(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Welcome to my API")
 }
@@ -145,6 +147,9 @@ func main() {
 
 	//DELETE
 	router.HandleFunc("/videos/{id}", deleteVideo).Methods("DELETE")
+
+	//UPDATE
+	router.HandleFunc("/videos/{id}", updateVideo).Methods("PUT")
 
 	log.Fatal(http.ListenAndServe(":3000", router))
 }
