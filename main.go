@@ -98,11 +98,30 @@ func updateVideo(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	videoId, err := strconv.Atoi(vars["id"])
 
+	var updatedVid video
+
 	if err != nil {
 		fmt.Fprint(w, "Invalid Id")
 		return
 	}
 
+	reqBody, err := ioutil.ReadyAll(r.Body)
+
+	if err != nil {
+		fmt.Fprint(w, "Ingresa ingresa informacion correspondiente")
+	}
+
+	json.UnMarshal(reqBody, &updatedVid)
+
+	for i, v := range videos {
+		if v.ID == videoId {
+			videos = append(videos[:i], videos[i+1:]...)
+			updatedVid.ID = videoId
+			append(videos, updatedVid)
+
+			fmt.Fprintf(w, "la tarea fue modificada correctamente")
+		}
+	}
 }
 
 func indexRoute(w http.ResponseWriter, r *http.Request) {
