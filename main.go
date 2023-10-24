@@ -53,6 +53,7 @@ func createVideo(w http.ResponseWriter, r *http.Request) {
 }
 
 func getVideos(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(videos)
 }
 
@@ -69,6 +70,7 @@ func main() {
 
 	router.HandleFunc("/", indexRoute)
 	router.HandleFunc("/videos", getVideos)
+	router.HandleFunc("/videos", createVideo)
 
 	log.Fatal(http.ListenAndServe(":3000", router))
 }
