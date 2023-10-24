@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -31,13 +33,23 @@ var videos = allVideos{
 	},
 }
 
+func getVideos(w http.ResponseWriter, r *http.Request) {
+	json.NewEncoder(w).Encode(videos)
+}
+
 func indexRoute(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Welcome to my API")
 }
 
 func main() {
 
+	// router := mux.NewRouter().StrictSlash(true
 	router := mux.NewRouter().StrictSlash(true)
 
+	//Rutas
+
 	router.HandleFunc("/", indexRoute)
+	router.HandleFunc("/videos", getVideos)
+
+	log.Fatal(http.ListenAndServe(":3000", router))
 }
